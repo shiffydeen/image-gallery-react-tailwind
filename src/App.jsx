@@ -15,17 +15,22 @@ function App() {
     setTerm(text)
   }
 
+  
   const url = `https://pixabay.com/api/?key=${apiKey}&q=${term}&image_type=photo&pretty=true`;
+
 
   const fetchPhotos = async () => {
     setIsLoading(true)
-    const res = await fetch(url);
-    const data = await res.json();
-    setImages(data.hits);
-    setIsLoading(false)
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      setImages(data.hits);
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
   }
-
-  
 
   useEffect(() => {
     fetchPhotos()
@@ -39,16 +44,14 @@ function App() {
 
   return (
     <>
-    
-    <div className="container mx-auto">
-      <ImageSearch searchTerm={searchTerm} />
-      <div className="grid grid-cols-3 gap-4">
-        {images.map((image, index) => (
-          <ImageCard key={index} image={image}  />
-        ))}
+      <div className="container mx-auto">
+        <ImageSearch searchTerm={searchTerm} />
+        <div className="grid grid-cols-3 gap-4">
+          {images.map((image, index) => (
+            <ImageCard key={index} image={image}  />
+          ))}
+        </div>
       </div>
-    </div>
-      
     </>
   )
 }
